@@ -1,0 +1,8 @@
+[Unit]
+Description=Backup Timer
+
+[Timer]
+OnCalendar={{ backup_timer_string }}
+
+[Install]
+WantedBy=multi-user.target

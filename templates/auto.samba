@@ -1,0 +1,1 @@
+{{ backup_mountpoint }} -fstype=cifs,vers=3.0,noserverino,credentials=/etc/.samba-credentials,dir_mode=0700,file_mode=0700 :{{ backup_smb_share }}

@@ -1,0 +1,28 @@
+---
+
+## Samba user credentials
+# backup_smb_user:
+# backup_smb_password:
+
+## Samba share and mount location
+# backup_smb_share: //smb.example.com/backup
+backup_mountpoint: /mnt/backup
+
+## This is the 'OnCalendar' variable
+## used in the systemd timer
+backup_timer_string: "*-*-* 03:30:00"
+
+## Days to keep backups before deleting them again
+backup_keep_days: 14
+
+## The user that executes the backup service
+backup_user: root
+backup_group: "{{ backup_user }}"
+
+## Backup and cleanup scripts
+# backup_script: |
+#   FILENAME="{{ backup_mountpoint }}/$(date '+%Y%m%d-%H%M%S').sql.gz"
+#   mysqldump -u root --no-data dbname | gzip > "${FILENAME}"
+
+backup_cleanup: |
+  find "{{ backup_mountpoint }}" -mtime "+{{ backup_keep_days }}" -delete

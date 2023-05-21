@@ -1,0 +1,66 @@
+---
+- name: Install dependencies
+  ansible.builtin.package:
+    name:
+      - autofs
+      - cifs-utils
+
+- name: Configure autofs
+  ansible.builtin.template:
+    src: '{{ item }}'
+    dest: /etc/{{ item }}
+    mode: '0644'
+  loop:
+    - auto.master
+    - auto.samba
+  notify: Restart autofs
+
+- name: Configure samba credentials
+  ansible.builtin.template:
+    src: .samba-credentials
+    dest: /etc/.samba-credentials
+    mode: '0600'
+    owner: root
+    group: root
+  notify: Restart autofs
+
+- name: Start and enable autofs service
+  ansible.builtin.systemd:
+    name: autofs.service
+    state: started
+    enabled: true
+
+- name: Create script folder
+  ansible.builtin.file:
+    path: /opt/backup
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Create backup scripts
+  ansible.builtin.template:
+    src: '{{ item }}'
+    dest: /opt/backup/{{ item }}
+    mode: '0755'
+    owner: root
+    group: root
+  loop:
+    - backup
+    - cleanup
+
+- name: Install backup service
+  ansible.builtin.template:
+    src: '{{ item }}'
+    dest: /etc/systemd/system/{{ item }}
+    mode: '0644'
+  loop:
+    - backup.service
+    - backup.timer
+  notify: Restart backup
+
+- name: Start backup timer
+  ansible.builtin.service:
+    name: backup.timer
+    state: started
+    enabled: true
