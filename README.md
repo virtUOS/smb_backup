@@ -28,7 +28,7 @@ Your playbook, could look like this:
         backup_smb_password: samba_user_password
         backup_script: |
           FILENAME="{{ backup_mountpoint }}/$(date '+%Y%m%d-%H%M%S').sql.gz"
-          mysqldump -u root --no-data dbname | gzip > "${FILENAME}"
+          mysqldump -u root dbname | gzip > "${FILENAME}"
 ```
 
 ## License
