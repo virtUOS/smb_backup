@@ -24,5 +24,8 @@ backup_group: "{{ backup_user }}"
 #   FILENAME="{{ backup_mountpoint }}/$(date '+%Y%m%d-%H%M%S').sql.gz"
 #   mysqldump -u root --no-data dbname | gzip > "${FILENAME}"
 
-backup_cleanup: |
-  find "{{ backup_mountpoint }}" -mtime "+{{ backup_keep_days }}" -delete
+backup_cleanup: >-
+  find "{{ backup_mountpoint }}"
+  -mindepth 2
+  -mtime "+{{ backup_keep_days }}"
+  -exec rm -rfv '{}' \;
