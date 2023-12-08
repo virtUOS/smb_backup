@@ -1,4 +1,4 @@
 #!/bin/sh
 
-set -eu
+set -eux
 {{ backup_cleanup }}
