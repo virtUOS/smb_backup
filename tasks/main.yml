@@ -59,6 +59,17 @@
     - backup.timer
   notify: Restart backup
 
+- name: Set permissions of backup file
+  ansible.builtin.file:
+    path: '{{ backup_metrics_path }}'
+    state: touch
+    mode: '0644'
+    owner: '{{ backup_user }}'
+    group: '{{ backup_group }}'
+    modification_time: preserve
+    access_time: preserve
+  when: backup_metrics_path != ""
+
 - name: Start backup timer
   ansible.builtin.service:
     name: backup.timer

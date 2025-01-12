@@ -29,3 +29,6 @@ backup_cleanup: >-
   -mindepth 2
   -mtime "+{{ backup_keep_days }}"
   -exec rm -rfv '{}' \;
+
+## Path for backup metrics
+backup_metrics_path: ""
