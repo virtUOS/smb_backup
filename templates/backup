@@ -3,3 +3,9 @@
 set -eux
 
 {{ backup_script }}
+
+{% if backup_metrics_path %}
+echo '# HELP backup_time Time stamp of backup' > "{{ backup_metrics_path }}"
+echo '# TYPE backup_time counter' >> "{{ backup_metrics_path }}"
+echo "backup_time $(date +%s)" >> "{{ backup_metrics_path }}"
+{% endif %}
